@@ -1,0 +1,1 @@
+This file should contain information about the Asset Store product.
