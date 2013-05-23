@@ -1,9 +1,31 @@
-// Note: This installer will not work for Unity versions under 3.3, as it uses AssetDatabase.ImportPackage.
-
-// Usage:
-// 1. Rename MYPACKAGE within all *.cs files to a unique name for your Asset Store package. Be sure to do this with all file names as well.
-// 2. Be sure to edit the included key image and the README.txt.
-// 3. Add any additional pre- and post- callbacks that your package may require.
+/*
+ * Asset Store Installer
+ * 
+ * VERY IMPORTANT: Do not test this installer within its own development environment. Its default behaviour is to DELETE ITSELF after running!
+ * 
+ * Note: This installer will not work for Unity versions under 3.3, as it uses AssetDatabase.ImportPackage.
+ * Usage:
+ * 1. Import this package into the project that will be uploaded to the Asset Store.
+ * 2. Rename MYPACKAGE within all *.cs files to a unique name for your Asset Store package. Be sure to do this with all file names as well.
+ * 3. Be sure to edit the included key image and the README.txt.
+ * 4. Add any additional pre- and post- callbacks that your package may require.
+ *
+ * Copyright (c) 2013 Thinksquirrel Software, LLC
+ *
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+ * 
+ * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, 
+ * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT 
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
 
 using UnityEngine;
 using UnityEditor;
@@ -11,7 +33,6 @@ using UnityEditor;
 [InitializeOnLoad]
 public static class ASInstaller_MYPACKAGE
 {
-
 	#region Settings - Edit these
 	// The display name for the package, shown to the user.
 	internal static string _displayName = "MYPACKAGE";
@@ -136,7 +157,9 @@ public static class ASInstaller_MYPACKAGE
 	#endregion
 				
 	
-	#region Internal stuff					
+	#region Internal stuff
+	internal const string _installerVersionString = "Asset Store Installer v. 1.0.0";
+	
 	// Runs on compile, immediately after installing from the Asset Store
 	static ASInstaller_MYPACKAGE()
 	{		
@@ -299,7 +322,7 @@ public static class ASInstaller_MYPACKAGE
 		
 		try
 		{
-			//AssetDatabase.ImportPackage(string.Format("{0}.unitypackage", _packageName), _interactivePackageInstall);
+			AssetDatabase.ImportPackage(string.Format("{0}.unitypackage", _packageName), _interactivePackageInstall);
 		}
 		catch
 		{
@@ -319,7 +342,7 @@ public static class ASInstaller_MYPACKAGE
 	
 		try
 		{
-			//AssetDatabase.ImportPackage(string.Format("{0}.unitypackage", _examplePackageName), _interactiveExamplePackageInstall);
+			AssetDatabase.ImportPackage(string.Format("{0}.unitypackage", _examplePackageName), _interactiveExamplePackageInstall);
 		}
 		catch
 		{
@@ -339,6 +362,8 @@ public static class ASInstaller_MYPACKAGE
 			return;
 		
 		FileUtil.DeleteFileOrDirectory(string.Format("Assets/{0}", _baseFolder));
+		
+		AssetDatabase.Refresh();
 	}
 	#endregion
 }
