@@ -45,21 +45,15 @@ public static class ASInstaller_MYPACKAGE
 	const string _baseFolder = "ASInstaller_MYPACKAGE";
 	
 	// If enabled, install proceeds silently without any user intervention needed. 
-	// Any example packages will also automatically be installed
 	static bool _silentInstall = false;
 	
 	// These values control whether or not the actual package import process should be interactive or silent.
 	static bool _interactivePackageInstall = false;
-	static bool _interactiveExamplePackageInstall = true;
 	
 	// If enabled, installation files will be removed. This will remove the entire base folder.
 	// It is highly recommended to keep this enabled, or you will HAVE to handle cleanup manually!
 	// Disabling this without a proper cleanup procedure will cause the installation to repeat every time a script is compiled.
 	static bool _deleteInstallationFiles = true;
-	
-	// If enabled, a seperate .unitypackage will be installed with example scripts, if the user desires.
-	// It is recommended to put all files in one package if silent install is enabled.
-	internal static bool _examplePackage = true;
 	
 	// The name of the .unitypackage (without extension), by version.
 	// Includes a fallback version (should contain the latest version of your package).
@@ -103,45 +97,7 @@ public static class ASInstaller_MYPACKAGE
 #else
 		"MYPACKAGE-4.1.2"
 #endif
-			;
-	
-	const string _examplePackageName = 
-#if UNITY_3_3
-		"MYPACKAGE-Examples-3.3"
-#elif UNITY_3_4_0
-		"MYPACKAGE-Examples-3.4"
-#elif UNITY_3_4_1
-		"MYPACKAGE-Examples-3.4.1"
-#elif UNITY_3_4_2
-		"MYPACKAGE-Examples-3.4.2"		
-#elif UNITY_3_5_0
-		"MYPACKAGE-Examples-3.5"	
-#elif UNITY_3_5_1
-		"MYPACKAGE-Examples-3.5.1"	
-#elif UNITY_3_5_2
-		"MYPACKAGE-Examples-3.5.2"
-#elif UNITY_3_5_3
-		"MYPACKAGE-Examples-3.5.3"
-#elif UNITY_3_5_4
-		"MYPACKAGE-Examples-3.5.4"
-#elif UNITY_3_5_5
-		"MYPACKAGE-Examples-3.5.5"
-#elif UNITY_3_5_6
-		"MYPACKAGE-Examples-3.5.6"		
-#elif UNITY_3_5_7
-		"MYPACKAGE-Examples-3.5.7"		
-#elif UNITY_4_0_0
-		"MYPACKAGE-Examples-4.0.0"
-#elif UNITY_4_0_1
-		"MYPACKAGE-Examples-4.0.1"		
-#elif UNITY_4_1_0
-		"MYPACKAGE-Examples-4.1.0"
-#elif UNITY_4_1_2
-		"MYPACKAGE-Examples-4.1.2"
-#else
-		"MYPACKAGE-Examples-4.1.2"
-#endif	
-			;		
+			;	
 	#endregion
 	
 	#region Callbacks
@@ -188,11 +144,6 @@ public static class ASInstaller_MYPACKAGE
 		EditorApplication.update += UpdateInstallPackage;
 	}
 	
-	internal static void StartExamplesInstall()
-	{
-		EditorApplication.update += UpdateInstallExamples;
-	}
-	
 	// Due to how Unity implements ImportPackage, package import needs to happen over a period of time, with a delay in between (or all packages will not import)
 	// Unity also seems to not throw any exceptions when package import fails. :(
 	static void UpdateInstallFull()
@@ -209,24 +160,6 @@ public static class ASInstaller_MYPACKAGE
 					}
 					break;
 				case 1:
-					if (_examplePackage)
-					{
-						if (!InstallExamples())
-						{
-							EditorApplication.update -= UpdateInstallFull;
-							Debug.LogError("Error during installation!");
-						}
-					}
-					else if (_deleteInstallationFiles)
-					{
-						DeleteBaseFolder();
-					}
-					else
-					{
-						EditorApplication.update -= UpdateInstallFull;
-					}
-					break;
-				case 2:
 					if (_deleteInstallationFiles)
 					{
 						DeleteBaseFolder();
@@ -278,43 +211,7 @@ public static class ASInstaller_MYPACKAGE
 			__lastEventTime = Time.realtimeSinceStartup;
 		}
 	}
-	
-	static void UpdateInstallExamples()
-	{
-		if (Time.realtimeSinceStartup > __lastEventTime + __delay)
-		{
-			switch(__eventID)
-			{
-				case 0:
-					if (_examplePackage)
-					{
-						if (!InstallExamples())
-						{
-							EditorApplication.update -= UpdateInstallExamples;
-							Debug.LogError("Error during installation!");
-						}
-					}
-					break;
-				case 1:
-					if (_deleteInstallationFiles)
-					{
-						DeleteBaseFolder();
-					}
-					else
-					{
-						EditorApplication.update -= UpdateInstallExamples;
-					}
-					break;
-				default:
-					EditorApplication.update -= UpdateInstallExamples;
-					break;
-			}
-			
-			__eventID++;
-			__lastEventTime = Time.realtimeSinceStartup;
-		}
-	}
-	
+		
 	static bool InstallPackage()
 	{
 		if (OnPreInstall != null)
@@ -331,26 +228,6 @@ public static class ASInstaller_MYPACKAGE
 		
 		if (OnPostInstall != null)
 			return OnPostInstall(_packageName);
-	
-		return true;
-	}
-	
-	static bool InstallExamples()
-	{
-		if (OnPreInstall != null)
-			if (!OnPreInstall(_examplePackageName)) return false;
-	
-		try
-		{
-			AssetDatabase.ImportPackage(string.Format("{0}.unitypackage", _examplePackageName), _interactiveExamplePackageInstall);
-		}
-		catch
-		{
-			return false;
-		}
-		
-		if (OnPostInstall != null)
-			return OnPostInstall(_examplePackageName);
 	
 		return true;
 	}

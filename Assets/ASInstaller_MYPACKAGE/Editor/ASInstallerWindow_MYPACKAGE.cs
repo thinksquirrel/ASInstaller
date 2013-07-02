@@ -82,25 +82,11 @@ public class ASInstallerWindow_MYPACKAGE : EditorWindow
 			
 			GUILayout.BeginVertical();
 			GUILayout.FlexibleSpace();
-			// Install (package + example project)
-			if (ASInstaller_MYPACKAGE._examplePackage)
-				if (GUILayout.Button(string.Format("Install {0} + Examples", ASInstaller_MYPACKAGE._displayName), GUILayout.Height(30)))
-			{
-				ASInstaller_MYPACKAGE.StartFullInstall();
-				this.Close();
-			}
-			// Install (package only)
-			if (GUILayout.Button(string.Format(ASInstaller_MYPACKAGE._examplePackage ? "Install {0} Only" : "Install {0}", ASInstaller_MYPACKAGE._displayName), GUILayout.Height(30)))
+			
+			// Install
+			if (GUILayout.Button(string.Format("Install {0}", ASInstaller_MYPACKAGE._displayName), GUILayout.Height(30)))
 			{
 				ASInstaller_MYPACKAGE.StartPackageInstall();
-				this.Close();
-			}
-			
-			// Install (example project only)
-			if (ASInstaller_MYPACKAGE._examplePackage)
-				if (GUILayout.Button("Install Examples Only", GUILayout.Height(30)))
-			{
-				ASInstaller_MYPACKAGE.StartExamplesInstall();
 				this.Close();
 			}
 			
