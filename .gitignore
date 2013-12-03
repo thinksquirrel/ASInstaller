@@ -1,8 +1,10 @@
 Library
 Temp
+ProjectSettings
 *.sln
 *.userprefs
 *.csproj
 *.unityproj
 *.booproj
 *.pidb
+*.meta
