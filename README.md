@@ -1,7 +1,7 @@
 Asset Store Installer
 ===========
 
-Notes:
+Notes
 ---
 VERY IMPORTANT: Do not test this installer within its own development environment.
 It will DELETE ITSELF after running!
