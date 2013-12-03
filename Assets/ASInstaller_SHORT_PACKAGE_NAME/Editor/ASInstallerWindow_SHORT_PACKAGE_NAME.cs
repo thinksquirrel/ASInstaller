@@ -1,20 +1,18 @@
 /*
  * Asset Store Installer
- *
- * This is an example script with additional options that you can add to the installer
  * 
  * VERY IMPORTANT: Do not test this installer within its own development environment.
- * Its default behaviour is to DELETE ITSELF after running!
+ * It will DELETE ITSELF after running!
  * You can define ASINSTALLER_DEVELOPMENT in order to prevent the installer window from showing up on load.
  * 
  * Note: This installer will not work for Unity versions under 3.3, as it uses AssetDatabase.ImportPackage.
  * Usage:
- * 1. Import this package into the project that will be uploaded to the Asset Store.
+ * 1. Import these files into the project that will be uploaded to the Asset Store.
  * 2. In all files/file names, rename the following:
  *      * SHORT_PACKAGE_NAME - A short name for your package to be used in variable and file names
  *      * FULL_PACKAGE_NAME - A full, human readable name for your package
- * 4. Be sure to edit the included key image and the README.txt.
- * 5. Add any additional pre- and post- callbacks that your package may require.
+ * 3. Be sure to edit the included key image and the README.txt.
+ * 4. Add any additional pre- and post- callbacks that your package may require.
  *
  */
 using UnityEditor;
